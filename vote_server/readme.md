@@ -1,1 +1,1 @@
-docker run -d --name vote-postgres -p 5432:5432 -e POSTGRES_USER=htadmin  -e POSTGRES_PASSWORD=mysecretpassword  -e POSTGRES_DB=vote_db postgres:11.5-alpine
+docker run -d --name article-postgres -p 5432:5432 -e POSTGRES_USER=htadmin  -e POSTGRES_PASSWORD=mysecretpassword  -e POSTGRES_DB=vote_db postgres:11.5-alpine

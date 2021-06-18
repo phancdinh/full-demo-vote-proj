@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,18 +13,19 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Data
-@Table(name = "votes")
-public class Vote implements Serializable {
+@Table(name = "articles")
+@Getter
+@Setter
+public class Article implements Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
 
     private String description;
 
-    @OneToMany(mappedBy = "vote")
-    private List<UserVote> userVotes;
+    @OneToMany(mappedBy = "article")
+    private List<ArticleVote> articleVotes;
 }

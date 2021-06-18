@@ -2,50 +2,32 @@ import {
   call,
   put,
   takeLatest,
-  takeLeading,
-  actionChannel,
-  take,
 } from 'redux-saga/effects';
-import _ from 'lodash';
 import {
   LOGIN_DONE,
   LOGIN_FAILED,
   LOGIN_START,
-  LOGOUT_START,
-  LOGOUT_DONE,
-  LOGOUT_FAILED,
 } from '../actions/Actions';
 import UserService from '../service/LoginService';
+import {TOKEN_LOCAL_STORAGE_KEY} from "../../constants/constants";
+
 
 export function* doLogin({ payload }) {
   try {
-    yield call(UserService.doLogin, payload);
+    const result = yield call(UserService.doLogin, payload);
+    localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY, result.access_token);
     yield put({
       type: LOGIN_DONE,
     });
   } catch (error) {
     yield put({
       type: LOGIN_FAILED,
-      payload: { error: _.get(error, 'response.data.message') },
+      payload: { error: "Login Failed" },
     });
   }
 }
 
-export function* doLogout() {
-  try {
-    yield call(UserService.doLogout);
-    yield put({
-      type: LOGOUT_DONE,
-    });
-  } catch (error) {
-    yield put({
-      type: LOGOUT_FAILED,
-      payload: { error: _.get(error, 'response.data.message') },
-    });
-  }
-}
 
 export default [
   takeLatest(LOGIN_START, doLogin),
-  takeLatest(LOGOUT_START, doLogout),
 ];

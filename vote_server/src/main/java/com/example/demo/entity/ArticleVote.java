@@ -1,9 +1,12 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,14 +16,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
+@ToString(exclude = "article")
+@Setter
+@Getter
 @Entity
-@Data
-@Table(name = "user_votes")
-@Builder
-public class UserVote {
+@Table(name = "article_votes")
+public class ArticleVote {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
     private String username;
@@ -29,6 +32,7 @@ public class UserVote {
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "vote_id", nullable = false)
-    private Vote vote;
+    @JoinColumn(name = "acticle_id", nullable = false)
+    @JsonIgnore
+    private Article article;
 }

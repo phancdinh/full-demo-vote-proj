@@ -1,9 +1,9 @@
-package com.example.demo.dto;
+package com.example.demo.payload;
 
 import lombok.Data;
 
 
 @Data
 public class UserVoteCreateRequest {
-    private Integer voteId;
+    private String username;
 }
