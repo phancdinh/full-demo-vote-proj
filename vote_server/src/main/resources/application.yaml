@@ -1,0 +1,16 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          introspection-uri: https://localhost/oauth2/introspect
+          client-id: vominhvo
+          client-secret: P@ssw0rd
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://localhost:5432/vote_db
+    username: htadmin
+    password: mysecretpassword
