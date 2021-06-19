@@ -4,8 +4,8 @@ spring:
       resourceserver:
         opaquetoken:
           introspection-uri: https://dev.citizen.com.vn/oauth2/introspect
-          client-id: vominhvo
-          client-secret: P@ssw0rd
+          client-id: ${CLIENT_ID}
+          client-secret: ${CLIENT_SECRET}
   jpa:
     hibernate:
       ddl-auto: update
@@ -16,9 +16,13 @@ spring:
     password: mysecretpassword
 logging:
   level:
-    root: INFO
+    root: DEBUG
     web: DEBUG
     org:
       springframework:
         web: DEBUG
         security: DEBUG
+    com:
+      example:
+        demo:
+          DEBUG

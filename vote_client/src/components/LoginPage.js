@@ -1,17 +1,27 @@
-import React, {useRef} from 'react';
+import React, {useRef, useEffect} from 'react';
+
 import {connect} from 'react-redux';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import {LOGIN_START} from "../redux/actions/Actions";
+import {LOGIN_START, UPDATE_USER_INFO} from "../redux/actions/Actions";
 import {Redirect} from "@reach/router";
 import queryString from 'query-string';
+import {TOKEN_LOCAL_STORAGE_KEY} from "../constants/constants";
 
 
 function Login(props) {
+    useEffect(() => {
+        const token = localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY) || '';
+        const { loadUserInfo } = props;
+        if (!token || !loadUserInfo) {
+            return;
+        }
+        loadUserInfo(token);
+    });
     const inputUserNameElement = useRef(null);
     const inputPasswordElement = useRef(null);
-    const {loginSuccess} = props;
+    const {loginSuccess, loginFailure} = props;
     const queryParams = queryString.parse(window.location.search);
     const redirectUrl = queryParams.ref || '/home';
     const doSubmit = (e) => {
@@ -27,10 +37,13 @@ function Login(props) {
     if (loginSuccess) {
         return <Redirect from="/login" to={redirectUrl} noThrow />;
     }
+    const error = loginFailure? <span>Login failed.</span> : "";
+
     return (
             <div className="row justify-content-center">
                 <div className="col-6 mt-4">
                     <Form>
+                        <Form.Label>{error}</Form.Label>
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>User Name</Form.Label>
                             <Form.Control ref={inputUserNameElement} type="text" placeholder="Enter username" />
@@ -62,5 +75,8 @@ export default connect(
                     payload: {username, password},
                 });
             },
+            loadUserInfo: (token) => dispatch(
+                    {type: UPDATE_USER_INFO, payload: {token}}
+            )
         }),
 )(Login);

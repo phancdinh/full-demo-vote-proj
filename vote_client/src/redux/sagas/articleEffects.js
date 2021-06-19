@@ -10,10 +10,14 @@ import {
 import ArticleService from '../service/ArticleService';
 import {getUsername} from "../reducers/userReducer";
 import {select} from "@redux-saga/core/effects";
+import {listingSelector} from "../reducers/articleReducer";
 
 export function* loadArticles() {
   try {
-    const articles = yield call(ArticleService.getArticles);
+    const listing = yield select(listingSelector);
+    const {currentOffset, currentLimit, filter} = listing;
+    const {date} = filter;
+    const articles = yield call(ArticleService.getArticles, currentOffset, currentLimit, date);
     yield put({
       type: LOAD_ARTICLE_DONE,
       payload: {

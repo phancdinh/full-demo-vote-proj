@@ -3,9 +3,20 @@ import {keyBy, map, uniq, get, sumBy, find} from "lodash";
 
 const defaultArticleState = {
     allIds: [],
-    articles: {}
+    articles: {},
+    listing: {
+        isFetching: false,
+        filter: {
+            date: null,
+        },
+        currentLimit: 5,
+        currentOffset: 0,
+        ids: [],
+        error: null,
+    },
 };
 
+export const listingSelector = (state) => state.articleReducer.listing;
 
 export default (state = defaultArticleState, {type, payload}) => {
     switch (type) {

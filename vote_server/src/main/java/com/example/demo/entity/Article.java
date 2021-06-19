@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,8 @@ public class Article implements Serializable {
     private String name;
 
     private String description;
+
+    private Date createdDate;
 
     @OneToMany(mappedBy = "article")
     private List<ArticleVote> articleVotes;

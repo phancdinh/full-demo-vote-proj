@@ -23,7 +23,10 @@ class Home extends Component {
                 rows : <div>No article</div>
 
         return (
-                <div>
+                <div className="col-12">
+                    <div className="header bg-success">
+                        header
+                    </div>
                     {content}
                 </div>
         );

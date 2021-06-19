@@ -41,6 +41,9 @@ export default (state = defaultUserState, { type, payload }) => {
       const info = parseJwt(payload.token)
       return {
         ...state,
+        doingLogin: false,
+        loginSuccess: true,
+        loginFailure: false,
         userInfo: info
       };
     }

@@ -8,8 +8,15 @@ import com.example.demo.exception.ReachVoteCountException;
 import com.example.demo.repository.ArticleVoteRepository;
 import com.example.demo.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +29,35 @@ public class ArticleService {
     private final ArticleVoteRepository articleVoteRepository;
     private final ArticleRepository articleRepository;
 
-    public List<Article> getArticle() {
-        return articleRepository.findAll();
+    public static Date atStartOfDay(Date date) {
+        LocalDateTime localDateTime = dateToLocalDateTime(date);
+        LocalDateTime startOfDay = localDateTime.with(LocalTime.MIN);
+        return localDateTimeToDate(startOfDay);
+    }
+
+    public static Date atEndOfDay(Date date) {
+        LocalDateTime localDateTime = dateToLocalDateTime(date);
+        LocalDateTime endOfDay = localDateTime.with(LocalTime.MAX);
+        return localDateTimeToDate(endOfDay);
+    }
+
+
+    private static LocalDateTime dateToLocalDateTime(Date date) {
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    }
+
+    private static Date localDateTimeToDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+    public Page<Article> getArticle(int offset, int limit, Date date) {
+        if (date == null) {
+            date = new Date();
+        }
+        Date begin = atStartOfDay(date);
+        Date end = atEndOfDay(date);
+        Pageable pageable = PageRequest.of(offset, limit);
+
+        return articleRepository.findWithCreationDateTimeBefore(begin, end, pageable);
     }
 
     public ArticleVote createArticleVote(Integer articleId, UserVoteCreateRequest voteCreateRequest) {

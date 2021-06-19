@@ -1,9 +1,15 @@
 import apiService from './ApiService';
+import moment from 'moment';
 
 export default {
-  getArticles() {
+  getArticles(offset, limit, date) {
+    let momentDate = moment();
+    if (date) {
+      momentDate = moment(date);
+    }
+    const formatDate = momentDate.format("DDMMYYYY");
     return apiService
-      .get('/api/articles', {
+      .get(`/api/articles?offset=${offset}&limit=${limit}&filterDate=${formatDate}`, {
       })
       .then((response) => response.data);
   },
